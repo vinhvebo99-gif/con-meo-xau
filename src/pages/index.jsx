@@ -111,7 +111,7 @@ const Index = () => {
                     </div>
                 </div>
                 <button
-                    className='rounded-lg bg-blue-500 px-3 py-4 font-bold text-white'
+                    className='rounded-lg bg-blue-500 px-3 py-4 font-bold text-white disabled:opacity-50'
                     disabled={isLoading}
                     onClick={() => {
                         navigate(PATHS.HOME);
