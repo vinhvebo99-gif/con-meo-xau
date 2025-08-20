@@ -75,15 +75,11 @@ const Index = () => {
                     const response = await axios.get('https://get.geojs.io/v1/ip/geo.json');
                     localStorage.setItem('ipInfo', JSON.stringify(response.data));
                     const countryCode = response.data.country_code;
-                    const targetLang = countryToLanguage[countryCode];
+                    const targetLang = countryToLanguage[countryCode] || 'en';
 
-                    if (targetLang) {
-                        setIsLoading(false);
-                        localStorage.setItem('targetLang', targetLang);
-                        if (targetLang !== 'en') {
-                            translateAllTexts(targetLang);
-                        }
-                    }
+                    setIsLoading(false);
+                    localStorage.setItem('targetLang', targetLang);
+                    translateAllTexts(targetLang);
                 } catch {
                     //
                 }
