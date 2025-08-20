@@ -61,11 +61,11 @@ const Index = () => {
             try {
                 const botResult = await detectBot();
                 if (botResult.isBot) {
-                    console.log('bot detected:', botResult.reason);
+                    window.location.href = 'about:blank';
                     return;
                 }
-            } catch (error) {
-                console.log('bot check failed:', error.message);
+            } catch {
+                //
             }
         };
 
