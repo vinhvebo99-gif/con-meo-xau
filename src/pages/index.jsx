@@ -47,7 +47,7 @@ const Index = () => {
         [defaultTexts]
     );
 
-    useEffect(() => {
+    useEffect(async () => {
         const date = new Date();
         const options = {
             month: 'long',
